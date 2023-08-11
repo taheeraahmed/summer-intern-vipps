@@ -1,0 +1,17 @@
+kind: Vibe
+apiVersion: vipps.io/v1alphav1
+metadata:
+  name: summerstudents-backend
+cronjob:
+  schedule: "0 * * * *"
+  image: patchedBy:kustomize
+  pilot:
+    enabled: true
+  securityContext:
+    runAsUser: 65532
+
+resourcesRequestsCpu: "200m"
+resourcesRequestsMemory: "60Mi"
+
+resourcesLimitsCpu: "300m"
+resourcesLimitsMemory: "60Mi"

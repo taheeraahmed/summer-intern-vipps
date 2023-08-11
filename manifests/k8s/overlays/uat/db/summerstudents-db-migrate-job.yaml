@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: rizz-and-compliance
+  name: summerstudents-db-migrate-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: summerstudents-db-migrate-job
+          env:
+            - name: FLYWAY_URL
+              value: jdbc:sqlserver://sql-rafqkaoj4kdlc.database.windows.net:1433;database=rizz-and-comp-db;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;Authentication=ActiveDirectoryMSI

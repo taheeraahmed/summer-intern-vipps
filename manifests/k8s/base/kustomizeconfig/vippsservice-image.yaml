@@ -1,0 +1,5 @@
+# Kustomize needs information about how to search for 
+# and replace the image value for a VippsService.
+images:
+  - path: spec/container/image
+    kind: VippsService

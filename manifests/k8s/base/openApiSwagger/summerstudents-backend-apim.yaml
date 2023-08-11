@@ -1,0 +1,639 @@
+swagger: '2.0'
+info:
+  title: summerstudents-backend-app
+  description: This is the API for summer students backend
+  version: '1.1'
+paths:
+  # Camel case endpoint name + http method + Vx
+  # if endpoint list all, add all after Get
+
+  # ==== V0 api ==== #
+  # Operation ID naming standard:
+
+  /v0/merchants:
+    get:
+      tags:
+        - summerstudents-backend-app
+        - v0-api
+      operationId: MerchantsGetAllV0
+      summary: "Get all merchants"
+      description: "Get all merchants in our database"
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Merchant"
+
+    post:
+      tags:
+        - summerstudents-backend-app
+        - v0-api
+      operationId: MerchantsPostV0
+      summary: "Post a merchant"
+      description: "Post a merchant to the database"
+      responses:
+        '201':
+          description: Success
+      parameters:
+        - in: body
+          name: merchant
+          description: The merchant to be posted
+          schema:
+            $ref: '#/definitions/Merchant'
+
+  /v0/merchants/{vippsnummer}:
+    get:
+      tags:
+        - summerstudents-backend-app
+        - v0-api
+      operationId: MerchantsGetV0
+      summary: "Get a merchant given vippsnummer"
+      description: "Given a vippsnumber a merchant will be returned"
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: "#/definitions/Merchant"
+      parameters:
+        - in: path
+          name: vippsnummer
+          description: Get a merchant given its vippsnumber
+          required: true
+          type: integer
+    patch:
+      tags:
+        - summerstudents-backend-app
+        - v0-api
+      operationId: MerchantsPatchV0
+      summary: "Update a merchant"
+      description: "Fake update a merchant in the database"
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: "#/definitions/Merchant"
+      parameters:
+        - in: body
+          name: merchant
+          description: The merchant to be updated
+          schema:
+            $ref: '#/definitions/MerchantUpdateBody'
+        - in: path
+          name: vippsnummer
+          description: Update a merchant given its vippsnummer
+          required: true
+          type: integer
+
+  /v0/recurring-agreements:
+    post:
+      tags:
+        - summerstudents-backend-app
+        - v0-api
+      operationId: RecurringAgreementsPostV0
+      summary: "Posting recurring agreement"
+      description: "Try to created a recurring agreement in the recurring api"
+      parameters:
+        - in: body
+          name: agreement
+          description: The recurring agreement to be established
+          schema:
+            $ref: '#/definitions/AgreementBody'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/AgreementReturn'
+
+  /v0/recurring-agreements/{agreementId}:
+    patch:
+      tags:
+        - summerstudents-backend-app
+        - v0-api
+      operationId: RecurringAgreementsPatchV0
+      summary: "Update recurring agreement"
+      description: "Given a recurrent agreement id, update the agreement"
+      responses:
+        '200':
+          description: Success
+          schema:
+              $ref: '#/definitions/Agreement'
+      parameters:
+        - in: body
+          name: agreement
+          description: The recurring agreement to be established
+          schema:
+            $ref: '#/definitions/AgreementUpdateBody'
+        - in: path
+          name: agreementId
+          description: Update a recurring agreement given its agreementId
+          required: true
+          type: integer
+
+    get:
+      tags:
+        - summerstudents-backend-app
+        - Recurrizz v0 endpoints
+      operationId: RecurringAgreementsGetV0
+      summary: "Get recurring agreement"
+      description: "Given a recurrent agreement id, get the agreement"
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/AgreementReturn'
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      parameters:
+        - in: path
+          name: agreementId
+          description: Get a recurring agreement given its agreementId
+          required: true
+          type: integer
+
+  /v0/recurring-agreements/customer/{customerId}:
+    get:
+      tags:
+        - summerstudents-backend-app
+        - v0-api
+      operationId: CustomerAgreementsGetAllV0
+      summary: "Posting recurring agreement"
+      description: "Try to created a recurring agreement in the recurring api"
+      parameters:
+        - in: path
+          name: customerId
+          description: Id of the customer
+          required: true
+          type: integer
+
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/AgreementGroups'
+
+  /v0/recurring-agreements/merchant/{vippsnummer}:
+    get:
+      tags:
+        - summerstudents-backend-app
+        - v0-api
+      operationId: MerchantAgreementsGetAllV0
+      summary: "Get merchants agreements"
+      description: "Get all agreements for a merchant"
+      parameters:
+        - in: path
+          name: vippsnummer
+          description: Vippsummer of merchant
+          required: true
+          type: integer
+
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Agreement'
+        '404':
+          description: "Not found"
+        '500':
+          description: "Internal server error"
+
+  # ==== V1 api ==== #
+
+  /v1/merchants:
+    get:
+      tags:
+        - summerstudents-backend-app
+        - Recurrizz v1 endpoints
+      operationId: MerchantsGetAllV1
+      summary: "Get all merchants"
+      description: "Get all merchants in our database"
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Merchant"
+        '500':
+          description: Internal server error
+
+    post:
+      tags:
+        - summerstudents-backend-app
+        - Recurrizz v1 endpoints
+      operationId: MerchantsPostV1
+      summary: "Post a merchant"
+      description: "Post a merchant to the database"
+      responses:
+        '201':
+          description: Success
+        '400':
+          description: Bad request
+        '409':
+          description: Conflict
+        '500':
+          description: Internal server error
+      parameters:
+        - in: body
+          name: merchant
+          description: The merchant to be posted
+          schema:
+            $ref: '#/definitions/Merchant'
+
+  /v1/merchants/{vippsnummer}:
+    get:
+      tags:
+        - summerstudents-backend-app
+        - Recurrizz v1 endpoints
+      operationId: MerchantsGetV1
+      summary: "Get a merchant given vippsnummer"
+      description: "Given a vippsnummer a merchant will be returned"
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: "#/definitions/Merchant"
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      parameters:
+        - in: path
+          name: vippsnummer
+          description: Get a merchant given its vippsnummer
+          required: true
+          type: integer
+    patch:
+      tags:
+        - summerstudents-backend-app
+        - Recurrizz v1 endpoints
+      operationId: MerchantsPatchV1
+      summary: "Update a merchant"
+      description: "Update a merchant in the database"
+      responses:
+        '200':
+          description: Success
+          schema:
+              $ref: "#/definitions/Merchant"
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      parameters:
+        - in: body
+          name: merchant
+          description: The merchant to be updated
+          schema:
+            $ref: '#/definitions/MerchantUpdateBody'
+        - in: path
+          name: vippsnummer
+          description: Update a merchant given its vippsnummer
+          required: true
+          type: integer
+
+  /v1/recurring-agreements:
+    post:
+      tags:
+        - summerstudents-backend-app
+        - Recurrizz v1 endpoints
+      operationId: RecurringAgreementsPostV1
+      summary: "Posting recurring agreement"
+      description: "Try to created a recurring agreement in the recurring api"
+      parameters:
+        - in: body
+          name: agreement
+          description: The recurring agreement to be established
+          schema:
+            $ref: '#/definitions/AgreementBody'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/AgreementReturn'
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+
+  /v1/recurring-agreements/{agreementId}:
+    get:
+      tags:
+        - summerstudents-backend-app
+        - Recurrizz v1 endpoints
+      operationId: RecurringAgreementsGetV1
+      summary: "Get recurring agreement"
+      description: "Given a recurrent agreement id, get the agreement"
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Agreement'
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+      parameters:
+        - in: path
+          name: agreementId
+          description: Get a recurring agreement given its agreementId
+          required: true
+          type: integer
+
+    patch:
+      tags:
+        - summerstudents-backend-app
+        - Recurrizz v1 endpoints
+      operationId: RecurringAgreementsPatchV1
+      summary: "Update recurring agreement"
+      description: "Given a recurrent agreement id, update the agreement"
+      responses:
+        '200':
+          description: Success
+          schema:
+              $ref: '#/definitions/Agreement'
+        '404':
+          description: Not found
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+      parameters:
+        - in: body
+          name: agreement
+          description: The recurring agreement to be established
+          schema:
+            $ref: '#/definitions/AgreementUpdateBody'
+        - in: path
+          name: agreementId
+          description: Update a recurring agreement given its agreementId
+          required: true
+          type: integer
+
+  /v1/recurring-agreements/customer/{customerId}:
+    get:
+      tags:
+        - summerstudents-backend-app
+        - Recurrizz v1 endpoints
+      operationId: CustomerAgreementsGetAllV1
+      summary: "Listing recurring agreements for a customer"
+      description: "Listing recurring agreements for a customer"
+      parameters:
+        - in: path
+          name: customerId
+          description: Id of the customer
+          required: true
+          type: integer
+
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/AgreementGroups'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+
+  /v1/recurring-agreements/merchant/{vippsnummer}:
+    get:
+      tags:
+        - summerstudents-backend-app
+        - v1-api
+      operationId: MerchantAgreementsGetAllV1
+      summary: "Get merchants agreements"
+      description: "Get all agreements for a merchant"
+      parameters:
+        - in: path
+          name: vippsnummer
+          description: Vippsummer of merchant
+          required: true
+          type: integer
+
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Agreement'
+        '404':
+          description: "Not found"
+        '500':
+          description: "Internal server error"
+
+definitions:
+  AgreementReturn:
+    type: object
+    properties:
+      agreementId:
+        type: integer
+      UUID:
+        type: string
+      vippsConfirmationUrl:
+        type: string
+      chargeId:
+        type: string
+  AgreementBody:
+    type: object
+    properties:
+      vippsnummer:
+        type: integer
+      customerId:
+        type: integer
+      amount:
+        type: integer
+      intervalUnit:
+        type: string
+        enum: ["WEEK", "MONTH", "YEAR"]
+      intervalCount:
+        type: integer
+      status:
+        type: string
+        enum: ["ACTIVE", "PAUSED", "STOPPED"]
+      agreementUrl:
+        type: string
+  Agreement:
+    type: object
+    properties:
+      recurringAgreementId:
+        type: integer
+      vippsnummer:
+        type: integer
+      customerId:
+        type: integer
+      startDate:
+        type: string
+        format: date
+      paymentDay:
+        type: integer
+      amount:
+        type: integer
+      intervalUnit:
+        type: string
+        enum: ["WEEK", "MONTH", "YEAR"]
+      intervalCount:
+        type: integer
+      agreementUrl:
+        type: string
+      status:
+        type: string
+        enum: ["ACTIVE", "PAUSED", "STOPPED"]
+      statusChangeTime:
+        type: string
+        format: datetime
+  AgreementUpdateBody:
+    type: object
+    properties:
+      amount:
+        type: integer
+        x-nullable: true
+      intervalUnit:
+        type: string
+        x-nullable: true
+        enum: ["WEEK", "MONTH", "YEAR"]
+      intervalCount:
+        type: integer
+        x-nullable: true
+      status:
+        type: string
+        x-nullable: true
+        enum: ["ACTIVE", "PAUSED", "STOPPED"]
+      paymentDay:
+        type: integer
+        x-nullable: true
+  Merchant:
+    type: object
+    properties:
+      vippsnummer:
+        type: integer
+      merchantName:
+        type: string
+      salesUnit:
+        type: string
+      description:
+        type: string
+      logoUrl:
+        type: string
+      coverUrl:
+        type: string
+      termsConditions:
+        type: string
+      hasRecurring:
+        type: boolean
+      offers:
+        type: array
+        items:
+          type: integer
+      minimumAmount:
+        type: integer
+        x-omitempty: false
+      greeting:
+        type: string
+        x-omitempty: false
+
+  MerchantUpdateBody:
+    type: object
+    properties:
+      merchantName:
+        type: string
+        x-nullable: true
+      salesUnit:
+        type: string
+        x-nullable: true
+      description:
+        type: string
+        x-nullable: true
+      logoUrl:
+        type: string
+        x-nullable: true
+      coverUrl:
+        type: string
+        x-nullable: true
+      termsConditions:
+        type: string
+        x-nullable: true
+      hasRecurring:
+        type: boolean
+        x-nullable: true
+      offers:
+        type: array
+        x-nullable: true
+        items:
+          type: integer
+      minimumAmount:
+        type: integer
+        x-nullable: true
+      greeting:
+        type: string
+        x-nullable: true
+
+
+  AgreementGroups:
+    type: object
+    properties:
+      active:
+        type: array
+        items:
+          $ref: '#/definitions/AgreementDetails'
+      paused:
+        type: array
+        items:
+          $ref: '#/definitions/AgreementDetails'
+      stopped:
+        type: array
+        items:
+          $ref: '#/definitions/AgreementDetails'
+
+  AgreementDetails:
+    type: object
+    properties:
+      recurringAgreementId:
+        type: integer
+        x-omitempty: false
+      vippsnummer:
+        type: integer
+        x-omitempty: false
+      customerId:
+        type: integer
+        x-omitempty: false
+      startDate:
+        type: string
+        format: date
+        x-omitempty: false
+      amount:
+        type: integer
+        x-omitempty: false
+      intervalUnit:
+        type: string
+        x-omitempty: false
+      intervalCount:
+        type: integer
+        x-omitempty: false
+      agreementUrl:
+        type: string
+        x-omitempty: false
+      status:
+        type: string
+        x-omitempty: false
+      salesUnit:
+        type: string
+        x-omitempty: false
+      logoUrl:
+        type: string
+        x-omitempty: false
+      statusChangeTime:
+        type: string
+        format: datetime
+        x-omitempty: false
+      paymentDay:
+        type: integer
+        x-omitempty: false

@@ -1,0 +1,12 @@
+apiVersion: vops.vipps.io/v1
+kind: VippsService
+metadata:
+  name: summerstudents-backend
+spec:
+  replicas: 2
+  container:
+    env: 
+      - name: ASPNETCORE_URLS
+        value: "http://+:8080"
+      - name: LOG_LEVEL
+        value: "Information"

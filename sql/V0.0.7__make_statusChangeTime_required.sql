@@ -1,0 +1,2 @@
+ALTER TABLE RIZZ.recurringAgreements
+ALTER COLUMN statusChangeTime DATETIME NOT NULL;

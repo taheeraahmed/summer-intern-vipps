@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  flyway-bootstrap:
+    image: flyway/flyway:9
+    command: [ "migrate" ]
+    volumes:
+      - type: bind
+        source: ./bootstrap
+        target: /flyway/sql
+    environment:
+      FLYWAY_URL: "jdbc:sqlserver://summerstudents-db;trustServerCertificate=true"
+      FLYWAY_USER: "sa"
+      FLYWAY_PASSWORD: "SuperSecret1337"
+      FLYWAY_CONNECT_RETRIES: 60
+    depends_on:
+      summerstudents-db:
+        condition: service_started
+    networks:
+      - summerstudents
+
+  flyway-sql:
+    build:
+      context: ./
+      dockerfile: DBMigrate.Dockerfile
+
+    command: [ "migrate" ]
+    environment:
+      FLYWAY_URL: "jdbc:sqlserver://summerstudents-db;databaseName=summerstudents-db;trustServerCertificate=true"
+      FLYWAY_USER: "sa"
+      FLYWAY_PASSWORD: "SuperSecret1337"
+      FLYWAY_CONNECT_RETRIES: 60
+    depends_on:
+      flyway-bootstrap:
+        condition: service_completed_successfully
+    networks:
+      - summerstudents
+
+  summerstudents-db:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=SuperSecret1337
+    networks:
+      - summerstudents
+    ports:
+      - "1436:1433"
+
+networks:
+  summerstudents:

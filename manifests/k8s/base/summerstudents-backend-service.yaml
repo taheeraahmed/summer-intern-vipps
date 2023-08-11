@@ -1,0 +1,76 @@
+apiVersion: vops.vipps.io/v1
+kind: VippsService
+metadata:
+  name: summerstudents-backend  # The application name, will be used for all created resources
+spec:
+  owner: team-summerstudents  # Mandatory team name
+  aadpodidbinding: summerstudents-backend # the azure identity for your application
+  replicas: 1 # Number of replicas for your application
+  container:
+    image: patchedBy:kustomize # Will be updated in build-and-deploy.yaml workflow with the image you build
+    imagePullPolicy: IfNotPresent
+    command: ["/app/api-server"]
+    ports:
+      - name: api-http
+        containerPort: 8080
+        protocol: TCP
+      - name: health
+        containerPort: 8081
+        protocol: TCP
+    resources:
+      limits:  # Max limit before getting throttled
+        cpu: 300m
+        memory: 60Mi
+      requests:  # Reserved capacity. Minimum available on node for getting scheduled
+        cpu: 200m
+        memory: 60Mi
+    securityContext: 
+      runAsUser: 65534 # If a non-root-user is not set in your docker image, this needs to be added.
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: health
+        scheme: HTTP
+      initialDelaySeconds: 5
+      timeoutSeconds: 5
+      periodSeconds: 5
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: health
+        scheme: HTTP
+      initialDelaySeconds: 5
+      timeoutSeconds: 5
+      periodSeconds: 30
+  service: 
+    port: 8080
+    targetPort: api-http
+  ingress:
+    enabled: true
+    apim:
+      apiConfig: summerstudents-backend-apim
+      apiId: summerstudents-backend-api
+      apiPath: /summerstudents-backend
+      subscriptionKey:
+        enabled: false
+  skipAnalysis: true
+  analysis:
+    interval: 30s
+    threshold: 1
+    stepWeights: [ 1, 5, 25, 50 ] # Canary scaling steps
+    metrics:
+      - name: request-success-rate
+        thresholdRange:
+          min: 99
+        interval: 1m
+      - name: request-duration
+        thresholdRange:
+          max: 500
+        interval: 30s
+    webhooks:
+      - name: load-test
+        muteAlert: true
+        type: rollout
+        url: http://flagger-loadtester.loadtester/
+        metadata:
+          cmd: "hey -z 2m -q 10 -c 2 http://summerstudents-backend-canary.rizz-and-compliance:8081/health"

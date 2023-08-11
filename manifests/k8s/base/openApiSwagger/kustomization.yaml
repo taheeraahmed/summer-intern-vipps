@@ -1,0 +1,4 @@
+configMapGenerator:
+  - name: summerstudents-backend-apim
+    files:
+      - summerstudents-backend-apim.yaml

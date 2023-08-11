@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: rizz-and-compliance
+  name: summerstudents-db-migrate-job
+  labels:
+    job: summerstudents-db-migrate-job
+spec:
+  backoffLimit: 5
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+        app: summerstudents-backend
+        aadpodidbinding: summerstudents-backend
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: summerstudents-db-migrate-job
+          image: replaceme:later # replaced in pipeline
+          args:
+            - "migrate"
+          resources:
+            limits:
+              cpu: 750m
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 256Mi
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name

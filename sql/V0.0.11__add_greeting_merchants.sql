@@ -1,0 +1,2 @@
+ALTER TABLE [RIZZ].[Merchants]
+ADD greeting VARCHAR(200) NOT NULL DEFAULT '';

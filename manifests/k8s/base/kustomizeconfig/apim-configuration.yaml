@@ -1,0 +1,12 @@
+# Kustomize needs information about how to search for 
+# and replace the config map containing your open api configuration.
+nameReference:
+  - kind: ConfigMap
+    fieldSpecs:
+      # The config map used to configure APIM
+      - kind: VippsService
+        path: spec/ingress/apim/apiConfig
+      # The config map used to configure the service mesh.
+      # It give the service mesh the capability to show traffic telemetry per route.
+    #   - kind: VippsService
+    #     path: spec/service/profile/configMapRef/name

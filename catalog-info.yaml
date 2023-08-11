@@ -1,0 +1,47 @@
+# Visit the docs for a full walktrough of this file
+# https://vippstech.no/docs/default/component/vipps-backstage
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: summerstudents-backend
+  description: this is summerstudents-backend
+  annotations:
+    backstage.io/techdocs-ref: dir:. # create and place all documentation .MD files under /docs
+    backstage.io/kubernetes-label-selector: 'app=summerstudents-backend' # the same name as in kubernetes
+    github.com/project-slug: 'vippsas/summerstudents-backend' # to enable CI/CD from GitHub
+    # azure.com/tag-selector: app/summerstudents-backend # tag key and value to pull your Azure resources in relation to this entity
+    # dev.azure.com/project: project-name # to enable Azure DevOps CI/CD
+    # dev.azure.com/build-definition: "pipeline-name" # to enable Azure DevOps CI/CD
+spec:
+  type: service
+  lifecycle: experimental
+  owner: team-summerstudents
+  system: system:default/summerstudents
+  providesApis:
+    - summerstudents-backend-api
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  title: Summerstudents API
+  name: summerstudents-backend-api
+  description: Authenticated HTTP API to be used by the Vipps app
+  annotations:
+    backstage.io/techdocs-ref: dir:. # create and place all documentation .MD files under /docs
+    backstage.io/kubernetes-label-selector: 'app=summerstudents-backend' # the same name as in kubernetes
+    github.com/project-slug: 'vippsas/summerstudents-backend'
+  links:
+    - url: https://vipps-prod-grafana-b2ecgja8eaedamg7.weu.grafana.azure.com/d/4c7819d9/summerstudents-backend-http-uat?orgId=1&refresh=10s
+      title: Summerstudents backend Overview Grafana
+      icon: dashboard
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-summerstudents
+  system: summerstudents
+  definition:
+    $text: https://github.com/vippsas/summerstudents-backend/blob/main/manifests/k8s/base/openApiSwagger/summerstudents-backend-apim.yaml
+
+---

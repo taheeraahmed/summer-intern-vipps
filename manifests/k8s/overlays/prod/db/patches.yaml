@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: rizz-and-compliance
+  name: patches
+spec:
+  template:
+    spec:
+      containers:
+        - name: summerstudents-db-migrate-job
+          env:
+            - name: FLYWAY_URL
+              value:

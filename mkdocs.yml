@@ -1,0 +1,19 @@
+site_name: "summerstudents-backend documentation"
+repo_url: https://github.com/vippsas/summerstudents-backend/
+edit_uri: edit/main/docs/
+nav:
+  - 'Home': README.md # will be README or INDEX.MD
+  - 'Getting started': start.md
+  - 'Create an endpoint' : endpoints.md
+  - 'Api' : api.md
+  - 'Database' : database.md
+  - 'Infrastrucutre' : infrastrucutre.md
+
+  # - 'Sub menu':
+  #   - 'Document 2': document2.md
+plugins:
+  - techdocs-core
+markdown_extensions:
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg

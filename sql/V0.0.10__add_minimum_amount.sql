@@ -1,0 +1,2 @@
+ALTER TABLE [RIZZ].[Merchants]
+ADD minimumAmount INT NOT NULL DEFAULT 0;

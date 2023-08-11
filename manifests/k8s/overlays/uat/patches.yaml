@@ -1,0 +1,15 @@
+apiVersion: vops.vipps.io/v1
+kind: VippsService
+metadata:
+  name: summerstudents-backend
+spec:
+  container:
+    env:
+      - name: HOST
+        value: "0.0.0.0"
+      - name: PORT
+        value: "8080"
+      - name: APP_ID
+        value: "9b7c5a76-2459-4dfe-838f-75b27b027357"
+      - name: ENV
+        value: "UAT"
